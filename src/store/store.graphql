@@ -1,0 +1,140 @@
+directive @upper on FIELD_DEFINITION
+
+type User {
+  id: String
+  name: String
+}
+
+type Food implements Product {
+  id: String @upper
+  name: RegistedFood
+  description: String
+  price: Int
+  weight: String
+}
+
+type Drink implements Product {
+  id: String
+  name: String
+  description: String
+  price: Int
+  alcohol: String
+}
+
+type Order {
+  user_name: String
+  food: [FoodOrder]
+  drink: [DrinkOrder]
+  total_price: Int
+}
+
+interface Product {
+  id: String
+  description: String
+  price: Int
+}
+
+union FoodDrink = Drink | Food
+
+enum RegistedFood {
+  chiken
+  hamburger
+  pizza
+}
+
+type FoodOrder {
+  name: String
+  count: Int
+  price: Int
+}
+type DrinkOrder {
+  name: String
+  count: Int
+  price: Int
+}
+
+input CreateUserInput {
+  name: String!
+}
+
+input UpdateUserInput {
+  id: String!
+  name: String!
+}
+input CreateFoodInput {
+  name: String!
+  description: String!
+  price: Int!
+  weight: String!
+}
+
+input UpdateFoodInput {
+  id: String!
+  name: String
+  description: String
+  price: Int
+  weight: String
+}
+
+input CreateDrinkInput {
+  name: String!
+  description: String!
+  price: Int!
+  alcohol: String!
+}
+
+input UpdateDrinkInput {
+  user_id: String!
+  product_id: String!
+  type: String!
+}
+
+input CreateOrderInput {
+  user_name: String!
+  food: [String]
+  drink: [String]
+}
+
+input UpdateOrderInput {
+  id: String!
+  food: [String]
+  drink: [String]
+}
+
+type Query {
+  users: [User]!
+  user(name: String!): User!
+
+  foods: [Food]!
+  food(name: String!): Food!
+
+  drinks: [Drink]!
+  drink(name: String!): Drink!
+
+  orders: [Order]
+  order(id: String!): Order!
+
+  products: [Product]
+
+  foodDrink: [FoodDrink]
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User
+  updateUser(updateUserInput: UpdateUserInput!): User
+  removeStore(id: String!): User
+
+  createFood(createFoodInput: CreateFoodInput!): Food
+  updateFood(updateFoodInput: UpdateFoodInput!): Food
+  removeFood(id: String!): Food
+
+  createDrink(createDrinkInput: CreateDrinkInput!): Drink
+  updateDrink(updateDrinkInput: UpdateDrinkInput!): Drink
+  removeDrink(id: String!): Drink
+
+  createOrder(createOrderInput: CreateOrderInput!): Order
+  updateOrder(updateOrderInput: UpdateOrderInput!): Order
+  removeOrder(id: String!): Order
+  # updateStore(updateStoreInput: UpdateStoreInput!): Store!
+  # removeStore(id: Int!): Store
+}
